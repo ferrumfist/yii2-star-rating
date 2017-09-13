@@ -15,7 +15,8 @@
     ],
     "require": {
         "yiisoft/yii2": "*",
-        "bower-asset/raty": "*"
+        "bower-asset/raty": "*",
+        "simialbi/yii2-schema-org": "*"
     },
     "autoload": {
         "psr-4": {
