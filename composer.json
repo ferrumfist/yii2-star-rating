@@ -19,7 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "ferrumfist\\yii2starrating\\": ""
+            "ferrumfist\\yii2\\starrating\\": ""
         }
     },
     "repositories": [
