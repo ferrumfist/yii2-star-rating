@@ -1,5 +1,5 @@
 {
-    "name": "yii2mod/yii2-star-rating",
+    "name": "ferrumfist/yii2-star-rating",
     "description": "Star rating widget based on jQuery Raty https://github.com/wbotelhos/raty",
     "type": "yii2-extension",
     "keywords": [
@@ -9,8 +9,8 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Igor Chepurnoy",
-            "email": "igorzfort@gmail.com"
+            "name": "Yaroslav Spirin",
+            "email": "ferrumfist@gmail.com"
         }
     ],
     "require": {
@@ -19,7 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "yii2mod\\rating\\": ""
+            "ferrumfist\\yii2starrating\\": ""
         }
     },
     "repositories": [
