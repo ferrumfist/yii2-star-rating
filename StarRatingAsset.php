@@ -1,6 +1,6 @@
 <?php
 
-namespace yii2mod\rating;
+namespace ferrumfist\yii2\starrating;
 
 use yii\web\AssetBundle;
 

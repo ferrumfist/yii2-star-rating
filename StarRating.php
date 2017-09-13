@@ -1,6 +1,6 @@
 <?php
 
-namespace yii2mod\rating;
+namespace ferrumfist\yii2\starrating;
 
 use yii\helpers\Html;
 use yii\helpers\Json;
@@ -23,6 +23,19 @@ class StarRating extends InputWidget
      */
     public $clientOptions = [];
 
+    public $value = 0;
+
+    /**
+     * @var votes number
+     */
+    public $votes = 0;
+
+    /**
+     * show caption
+     * @var bool
+     */
+    public $caption = true;
+
     /**
      * Init widget, configure client options
      */
@@ -38,11 +51,21 @@ class StarRating extends InputWidget
      *
      * @return string
      */
-    public function run()
-    {
+    public function run(){
         $this->registerAssets();
 
-        return Html::tag('div', '', $this->options);
+        $return = Html::tag('div', '', $this->options);
+
+        if ($this->caption){
+            $caption = \Yii::t('app', 'Rating: ')
+            .Html::tag('span', $this->clientOptions['score'], ['class'=>'rating__score']).", "
+            .\Yii::t('app', 'Votes: ')
+            .Html::tag('span', $this->votes, ['class'=>'rating__voices']);
+
+            $return .= Html::tag('div', $caption, ['class'=>'rating__details']);
+        }
+
+        return $return;
     }
 
     /**
