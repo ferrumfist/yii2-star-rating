@@ -37,9 +37,9 @@ class StarRating extends InputWidget
     public $value = 0;
 
     /**
-     * @var votes number
+     * @var Voter number
      */
-    public $votes = 0;
+    public $voices = 0;
 
     /**
      * show caption
@@ -50,16 +50,13 @@ class StarRating extends InputWidget
     public $captionOption = [];
 
     /**
-     * @var Voter
-     */
-    public $voter;
-
-    /**
      * Init widget, configure client options
      */
     public function init()
     {
         parent::init();
+
+        $this->registerTranslations();
 
         $this->googleOptons = ArrayHelper::merge([
             'headline' => Yii::$app->controller->view->title,
@@ -76,8 +73,6 @@ class StarRating extends InputWidget
         ], $this->captionOption);
 
         $this->configureClientOptions();
-
-        $this->registerTranslations();
     }
 
     /**
@@ -93,8 +88,8 @@ class StarRating extends InputWidget
         if ($this->caption){
             $caption = \Yii::t('starRating', 'Rating').": "
             .Html::tag('span', $this->clientOptions['score'], ['class'=>$this->captionOption['score']])." "
-            .\Yii::t('starRating', 'Votes').": "
-            .Html::tag('span', $this->votes, ['class'=>$this->captionOption['voices']]);
+            .\Yii::t('starRating', 'Voices').": "
+            .Html::tag('span', $this->voices, ['class'=>$this->captionOption['voices']]);
 
             $return .= Html::tag('div', $caption, ['id'=>$this->captionOption['id']]);
         }
@@ -108,7 +103,7 @@ class StarRating extends InputWidget
 
         $rating = new AggregateRating();
         $rating->ratingValue = $this->clientOptions['score'];
-        $rating->ratingCount = $this->votes;
+        $rating->ratingCount = $this->voices;
         $rating->itemReviewed = [$article];
 
         JsonLDHelper::add($rating);
@@ -149,25 +144,35 @@ class StarRating extends InputWidget
             $this->clientOptions['scoreName'] = Html::getInputName($this->model, $this->attribute);
         }
 
+        if(!isset($this->clientOptions['hints'])){
+            $this->clientOptions['hints'] = [
+                \Yii::t('starRating', 'bad'),
+                \Yii::t('starRating', 'poor'),
+                \Yii::t('starRating', 'regular'),
+                \Yii::t('starRating', 'good'),
+                \Yii::t('starRating', 'gorgeous')
+            ];
+        }
+
+        if( $this->hasModel() )
+            $this->voices = $this->model->voices;
+
         $clientOptions = Json::encode($this->clientOptions);
 
         $this->clientOptions['click'] = new JsExpression("function(score){
                 var target = $(this);
-        
                 var data = {id:'id', score:score};
-                
                 var opt = $clientOptions;
                 
                 $.ajax({
                   type: 'POST',
-                  url: '{$this->voter->getUrl()}',
+                  url: '/rating',
                   data: data,
                   success: function(data){
                     opt.score = data.score;
                     opt.readOnly = true;
                     
-                    target
-                    .raty(opt);
+                    target.raty(opt);
                     
                     //caption update
                     $('div#{$this->captionOption['id']} .{$this->captionOption['score']}').text(data.score);
