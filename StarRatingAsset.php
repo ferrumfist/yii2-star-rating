@@ -14,7 +14,7 @@ class StarRatingAsset extends AssetBundle
     /**
      * @var string
      */
-    public $sourcePath = '@bower/raty';
+    public $sourcePath = '@bower/ratyfa';
 
     /**
      * @var array
@@ -27,7 +27,7 @@ class StarRatingAsset extends AssetBundle
      * @var array
      */
     public $js = [
-        'lib/jquery.raty.js',
+        'lib/jquery.raty-fa.js',
     ];
 
     /**

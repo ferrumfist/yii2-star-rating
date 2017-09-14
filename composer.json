@@ -15,7 +15,7 @@
     ],
     "require": {
         "yiisoft/yii2": "*",
-        "bower-asset/raty": "*",
+        "bower-asset/ratyfa": "*",
         "simialbi/yii2-schema-org": "*"
     },
     "autoload": {
