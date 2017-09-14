@@ -19,13 +19,6 @@ class StarRatingAsset extends AssetBundle
     /**
      * @var array
      */
-    public $css = [
-        'lib/jquery.raty.css',
-    ];
-
-    /**
-     * @var array
-     */
     public $js = [
         'lib/jquery.raty-fa.js',
     ];
