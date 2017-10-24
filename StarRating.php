@@ -50,6 +50,8 @@ class StarRating extends InputWidget
     public $ratingId;
 
     public $attribute = 'score';
+    public $voicesAttribute = 'voices';
+    public $clickUrl;
 
     /**
      * Init widget, configure client options
@@ -165,7 +167,7 @@ class StarRating extends InputWidget
         }
 
         if( $this->hasModel() ) {
-            $this->voices = $this->model->voices;
+            $this->voices = $this->model->{$this->voicesAttribute};
             $this->clientOptions['readOnly'] = $this->model->readOnly;
         }
 
@@ -178,7 +180,7 @@ class StarRating extends InputWidget
                 
                 $.ajax({
                   type: 'POST',
-                  url: '/rating/',
+                  url: '{$this->clickUrl}',
                   data: data,
                   success: function(data){
                     opt.score = data.score;
