@@ -2,12 +2,28 @@
 namespace ferrumfist\yii2\starrating;
 
 use Yii;
+use yii\filters\ContentNegotiator;
 use yii\web\Controller;
+use yii\web\Response;
 
 abstract class DefaultController extends Controller{
 
-    public $url = '/rating';
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => ContentNegotiator::className(),
+                'only' => ['index', 'save'],
+                'formats' => [
+                    'application/json' => Response::FORMAT_JSON,
+                ]
+            ]
+        ];
+    }
 
+    /**
+     * @return array
+     */
     public function actionIndex()
     {
         $request = Yii::$app->request;
@@ -20,9 +36,7 @@ abstract class DefaultController extends Controller{
     /**
      * @param $id
      * @param $score
-     * @return string json
+     * @return array
      */
     abstract protected function save($id, $score);
-
-    abstract public function getRating();
 }

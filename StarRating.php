@@ -3,6 +3,7 @@
 namespace ferrumfist\yii2\starrating;
 
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
@@ -36,9 +37,6 @@ class StarRating extends InputWidget
      */
     public $value = 0;
 
-    /**
-     * @var Voter number
-     */
     public $voices = 0;
 
     /**
@@ -48,6 +46,10 @@ class StarRating extends InputWidget
     public $caption = true;
 
     public $captionOption = [];
+
+    public $ratingId;
+
+    public $attribute = 'score';
 
     /**
      * Init widget, configure client options
@@ -71,6 +73,14 @@ class StarRating extends InputWidget
             'score' => 'rating__score',
             'voices' => 'rating__voices'
         ], $this->captionOption);
+
+        if( $this->hasModel() ) {
+            $this->ratingId = $this->model->id;
+        }
+
+        if( !isset($this->ratingId) ){
+            throw new InvalidConfigException('You must set "ratingId" param');
+        }
 
         $this->configureClientOptions();
     }
@@ -154,19 +164,21 @@ class StarRating extends InputWidget
             ];
         }
 
-        if( $this->hasModel() )
+        if( $this->hasModel() ) {
             $this->voices = $this->model->voices;
+            $this->clientOptions['readOnly'] = $this->model->readOnly;
+        }
 
         $clientOptions = Json::encode($this->clientOptions);
 
         $this->clientOptions['click'] = new JsExpression("function(score){
                 var target = $(this);
-                var data = {id:'id', score:score};
+                var data = {id:'{$this->ratingId}', score:score};
                 var opt = $clientOptions;
                 
                 $.ajax({
                   type: 'POST',
-                  url: '/rating',
+                  url: '/rating/',
                   data: data,
                   success: function(data){
                     opt.score = data.score;
