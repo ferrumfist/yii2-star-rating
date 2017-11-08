@@ -166,6 +166,10 @@ class StarRating extends InputWidget
             ];
         }
 
+        if(!isset($this->clientOptions['noRatedMsg'])){
+            $this->clientOptions['noRatedMsg'] = \Yii::t('starRating', 'Not rated yet!');
+        }
+
         if( $this->hasModel() ) {
             $this->voices = $this->model->{$this->voicesAttribute};
             $this->clientOptions['readOnly'] = $this->model->readOnly;

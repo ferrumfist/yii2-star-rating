@@ -6,5 +6,6 @@ return [
     'poor' => 'плохо',
     'regular' => 'так себе',
     'good' => 'хорошо',
-    'gorgeous' => 'прекрасно'
+    'gorgeous' => 'прекрасно',
+    'Not rated yet!' => 'Нет голосов'
 ];
