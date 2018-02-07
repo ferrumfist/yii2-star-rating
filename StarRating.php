@@ -2,6 +2,8 @@
 
 namespace ferrumfist\yii2\starrating;
 
+use simialbi\yii2\schemaorg\helpers\JsonLDHelper;
+use simialbi\yii2\schemaorg\models\Thing;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
@@ -10,8 +12,6 @@ use yii\helpers\Json;
 use yii\web\JsExpression;
 use yii\widgets\InputWidget;
 use simialbi\yii2\schemaorg\models\AggregateRating;
-use simialbi\yii2\schemaorg\models\Article;
-use simialbi\yii2\schemaorg\helpers\JsonLDHelper;
 
 /**
  * Class StarRating
@@ -30,7 +30,8 @@ class StarRating extends InputWidget
      */
     public $clientOptions = [];
 
-    public $googleOptons = [];
+    /** @var Thing $itemReviewed */
+    public $itemReviewed = null;
 
     /**
      * @var string the input value.
@@ -61,14 +62,6 @@ class StarRating extends InputWidget
         parent::init();
 
         $this->registerTranslations();
-
-        $this->googleOptons = ArrayHelper::merge([
-            'headline' => Yii::$app->controller->view->title,
-            'author' => Yii::$app->name,
-            'datePublished' => date('c'), //ISO 8601
-            'publisher' => Yii::$app->name,
-            'image' => ''
-        ], $this->googleOptons);
 
         $this->captionOption = ArrayHelper::merge([
             'id' => $this->options['id'].'_caption',
@@ -106,20 +99,14 @@ class StarRating extends InputWidget
             $return .= Html::tag('div', $caption, ['id'=>$this->captionOption['id']]);
         }
 
-        $article = new Article();
-        $article->headline = $this->googleOptons['headline'];
-        $article->author = $this->googleOptons['author'];
-        $article->datePublished = $this->googleOptons['datePublished'];
-        $article->publisher = $this->googleOptons['publisher'];
-        $article->image = $this->googleOptons['image'];
+        if( $this->itemReviewed ){
+            $rating = new AggregateRating();
+            $rating->ratingValue = $this->clientOptions['score'];
+            $rating->ratingCount = $this->voices;
+            $rating->itemReviewed = $this->itemReviewed;
 
-        $rating = new AggregateRating();
-        $rating->ratingValue = $this->clientOptions['score'];
-        $rating->ratingCount = $this->voices;
-        $rating->itemReviewed = [$article];
-
-        JsonLDHelper::add($rating);
-        JsonLDHelper::render();
+            JsonLDHelper::add($rating);
+        }
 
         return $return;
     }
