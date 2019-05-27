@@ -14,13 +14,13 @@ class StarRatingAsset extends AssetBundle
     /**
      * @var string
      */
-    public $sourcePath = '@bower/ratyfa';
+    public $sourcePath = '@bower/raty';
 
     /**
      * @var array
      */
     public $js = [
-        'lib/jquery.raty-fa.js',
+        'lib/jquery.raty.js',
     ];
 
     /**
